@@ -1,9 +1,13 @@
 {
     "name": "rafacunha033/send-emails-php",
-    "autoload": {
+    "autoload": { 
         "psr-4": {
             "App\\": "src/"
-        }
+        
+        },
+        "files": [
+            "src/Config.php"
+        ]   
     },
     "authors": [
         {
@@ -11,5 +15,7 @@
             "email": "rafacunha.prof033@gmail.com"
         }
     ],
-    "require": {}
+    "require": {
+        "phpmailer/phpmailer": "^6.8.0"
+    }
 }
