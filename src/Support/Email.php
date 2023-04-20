@@ -2,9 +2,11 @@
 
 namespace App\Support;
 
-use Exception;
+// use Exception;
 use stdClass;
 use PHPMailer\PHPMailer\PHPMailer;
+use PHPMailer\PHPMailer\SMTP;
+use PHPMailer\PHPMailer\Exception;
 
 class Email 
 {
@@ -22,12 +24,12 @@ class Email
         $this->mail = new PHPMailer();
         $this->data = new stdClass();
 
+        $this->mail->SMTPDebug = SMTP::DEBUG_SERVER;  
         $this->mail->isSMTP();
         $this->mail->isHTML();
         $this->mail->setLanguage("br");
-
         $this->mail->SMTPAuth = true;
-        $this->mail->SMTPSecure = "tls";
+        $this->mail->SMTPSecure = PHPMailer::ENCRYPTION_SMTPS;
         $this->mail->CharSet = "utf-8";
 
         $this->mail->Host = MAIL["host"];
@@ -45,7 +47,7 @@ class Email
         return $this; 
     }
 
-    public function attach(string $filePath, string $fileName): Email
+    public function attach(string $filePath, string $fileName)
     {
         $this->data->attach[$filePath] = $fileName;
     }
@@ -67,12 +69,12 @@ class Email
             $this->mail->send();
             return true;
         } catch (Exception $exception) {
-            $this->error = $exception;
+            $this->error = $this->mail->ErrorInfo;
             return false;
         }     
     }
 
-    public function error(): ?Exception
+    public function error()
     {
         return $this->error;
     }
